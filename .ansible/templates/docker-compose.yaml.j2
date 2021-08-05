@@ -10,7 +10,7 @@ services:
       - {{ data_dir }}/:/fluentd/log/ 
       - {{ config_dir }}/:/fluentd/etc/
       - /var/lib/docker/containers/:/var/lib/docker/containers/
-      - {{ docker_docket }}:/var/run/docker.sock
+      - {{ docker_socket }}:/var/run/docker.sock
     environment:
       #https://github.com/fluent/fluentd-kubernetes-daemonset#run-as-root
       - FLUENT_UID=0 
