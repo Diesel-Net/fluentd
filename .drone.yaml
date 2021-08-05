@@ -8,23 +8,24 @@ clone:
 
 steps:
 
-  - name: docker build & push
+steps:
+  - name: docker build & push (dev/test)
     image: plugins/docker
     settings:
       mirror: dockerhub.nexus.diesel.net
       registry: docker.nexus.diesel.net
-      username: 
-        from_user: nexus_user
+      username:
+        from_secret: nexus_user
       password:
         from_secret: nexus_pass
       repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
       tags:
-          - ${DRONE_BRANCH}-latest
+        - ${DRONE_BRANCH}-latest
     when:
       branch:
         - development
         - stable
-      event: 
+      event:
         - push
 
   - name: docker build & push (prod)
@@ -38,10 +39,10 @@ steps:
         from_secret: nexus_pass
       repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
       tags:
-          - production-latest
-          - ${DRONE_TAG}
+        - production-latest
+        - ${DRONE_TAG}
     when:
-      event: 
+      event:
         - tag
 
   - name: deploy
