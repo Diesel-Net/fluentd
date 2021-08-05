@@ -1,0 +1,69 @@
+---
+kind: pipeline
+type: docker
+name: Install FluentD
+
+clone:
+  depth: 1
+
+steps:
+
+  - name: docker build & push
+    image: plugins/docker
+    settings:
+      mirror: dockerhub.nexus.diesel.net
+      registry: docker.nexus.diesel.net
+      username: 
+        from_user: nexus_user
+      password:
+        from_secret: nexus_pass
+      repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
+      tags:
+          - ${DRONE_BRANCH}-latest
+    when:
+      branch:
+        - development
+        - stable
+      event: 
+        - push
+
+  - name: docker build & push (prod)
+    image: plugins/docker
+    settings:
+      mirror: dockerhub.nexus.diesel.net
+      registry: docker.nexus.diesel.net
+      username:
+        from_secret: nexus_user
+      password:
+        from_secret: nexus_pass
+      repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
+      tags:
+          - production-latest
+          - ${DRONE_TAG}
+    when:
+      event: 
+        - tag
+
+  - name: deploy
+    image: plugins/ansible:3
+    environment:
+      ANSIBLE_CONFIG: .ansible/ansible.cfg
+    settings:
+      galaxy: .ansible/roles/requirements.yaml
+      playbook: .ansible/deploy.yaml
+      private_key:
+        from_secret: automation_id_rsa
+      vault_password:
+        from_secret: ansible_vault_password
+    commands:
+      - version=$DRONE_BRANCH
+      - if [ ! -z $DRONE_TAG ]; then version=production; fi
+      - /bin/drone-ansible --inventory .ansible/inventories/$$version/hosts
+
+trigger:
+  branch:
+    - development
+    - stable
+  event:
+    - push
+    - tag

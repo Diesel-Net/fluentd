@@ -1,0 +1,25 @@
+# docker-compose.yaml
+
+version: '3.8'
+services: 
+
+  collector:
+    image: {{ docker_image }}
+    volumes:
+      - {{ ssl_cert_dir }}/:/etc/ssl/certs/
+      - {{ data_dir }}/:/fluentd/log/ 
+      - {{ config_dir }}/:/fluentd/etc/
+      - /var/lib/docker/containers/:/var/lib/docker/containers/
+      - {{ docker_docket }}:/var/run/docker.sock
+    environment:
+      #https://github.com/fluent/fluentd-kubernetes-daemonset#run-as-root
+      - FLUENT_UID=0 
+    deploy:
+      mode: global
+      restart_policy:
+        condition: any
+      resources:
+          limits:
+            cpus: '2.0'
+          reservations:
+            cpus: '1.0'

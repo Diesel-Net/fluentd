@@ -1,0 +1,104 @@
+<source>
+  @type tail
+  @id in_tail_container_logs
+  path /var/lib/docker/containers/*/*-json.log
+  pos_file /fluentd/log/containers.log.pos
+  time_format "%Y-%m-%dT%H:%M:%S.%L%Z"
+  tag docker.*
+  keep_time_key true
+  read_from_head true
+  format json
+</source>
+
+<filter docker.var.lib.docker.containers.*.*.log>
+  @type docker_metadata
+  labels com.docker.stack.namespace:namespace,com.docker.swarm.service.name:service_name,com.docker.swarm.node.id:node_id
+</filter>
+
+<filter docker.var.lib.docker.containers.*.*.log>
+  @type record_transformer
+  <record>
+    environment {{ env }}
+    vm_hostname {{ inventory_hostname }}
+  </record>
+</filter>
+
+<match docker.var.lib.docker.containers.*.*.log>
+  @type rewrite_tag_filter
+  <rule>
+    key container_name
+    pattern /^(.*)(elastic|kibana|fluent)(.*)$/
+    tag ignore.${tag}
+  </rule>
+  <rule>
+    key service_name
+    pattern /^(.+)$/
+    tag raw.$1
+  </rule>
+  <rule>
+    key container_name
+    pattern /^(.+)$/
+    tag raw.adhoc
+  </rule>
+</match>
+
+<match ignore.**>
+  @type null
+</match>
+
+# uncomment for debugging
+# <match **>
+#   @type stdout
+# </match>
+
+<match raw.**>
+  @type detect_exceptions
+  remove_tag_prefix raw
+  message log
+  languages python
+</match>
+
+<match **>
+  @type relabel
+  @label @LOGS_PARSED
+</match>
+
+<label @LOGS_PARSED>
+  <match **>
+
+    @type elasticsearch
+    @log_level info
+    #log_es_400_reason true
+    suppress_type_name true
+
+    index_name docker-${tag}
+
+    ca_file /etc/ssl/certs/ca-certificates.crt
+    
+    scheme {{ elastic_scheme }}
+    host {{ elastic_host }}
+    port {{ elastic_port }}
+
+    user {{ elastic_username }}
+    password {{ elastic_password }}
+
+    reconnect_on_error true
+    reload_on_failure true
+    request_timeout 30s
+
+    <buffer>
+      @type file
+      path /fluentd/log/dlog/elastic-buffer
+      flush_thread_count 16
+      flush_mode immediate
+      retry_forever true
+    </buffer>
+
+  </match>
+</label>
+
+<label @FLUENT_LOG>
+  <match **>
+    @type null
+  </match>
+</label>

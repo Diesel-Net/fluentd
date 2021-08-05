@@ -1,0 +1,41 @@
+# ansible-playbook .ansible/deploy.yaml -i .ansible/inventories/development/hosts --vault-id ~/.tokens/vault.txt
+
+- hosts: fluentd
+  strategy: free
+  roles:
+    - common
+
+  tasks:
+
+    - include_role:
+        name: docker
+        tasks_from: stack_teardown
+      when: clean_install
+
+    - name: Remove data directory (clean install)
+      file: 
+        path: '{{ data_dir }}'
+        state: absent
+      become: yes
+      when: clean_install
+
+    - include_role:
+        name: common
+        tasks_from: make_config_dir
+
+    - include_role:
+        name: common
+        tasks_from: make_data_dir
+
+    - name: Render fluent.conf.j2 to {{ config_dir }}/fluent.conf
+      template:
+        src: fluent.conf.j2
+        dest: '{{ config_dir }}/fluent.conf'
+
+    - include_role:
+        name: docker
+        tasks_from: stack_deploy
+
+    - name: Force restart the docker service (to pick up configuration changes)
+      shell: docker service update --force {{ repository }}_{{ version }}_collector
+      when: not clean_install
