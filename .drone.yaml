@@ -49,6 +49,8 @@ steps:
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
+      ELASTIC_PASSWORD:
+        from_secret: elastic_pass
     settings:
       galaxy: .ansible/roles/requirements.yaml
       playbook: .ansible/deploy.yaml
