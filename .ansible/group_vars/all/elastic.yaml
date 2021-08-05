@@ -1,0 +1,6 @@
+elastic_scheme: https
+elastic_host: es.diesel.net
+elastic_port: 443
+
+elastic_username: elastic
+elastic_password: "{{ lookup('env', 'ELASTIC_PASSWORD') }}"
