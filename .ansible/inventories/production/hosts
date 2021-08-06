@@ -5,10 +5,6 @@ all:
       hosts:
         prod.diesel.net:
 
-    drone:
-      hosts:
-        drone.diesel.net:
-
     tools:
       hosts:
         tools.diesel.net:
