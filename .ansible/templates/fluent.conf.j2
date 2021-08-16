@@ -25,6 +25,8 @@
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
+
+    service ${record["service"].merge({key: "name", value: "docker"})}
     #service.name docker
     #event.dataset docker.${record["stream"]}
   </record>
