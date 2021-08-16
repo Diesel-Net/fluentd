@@ -81,9 +81,9 @@
     user {{ elastic_username }}
     password {{ elastic_password }}
 
-    # reconnect_on_error true
-    # reload_on_failure true
-    # request_timeout 30s
+    reconnect_on_error true
+    reload_on_failure true
+    request_timeout 30s
 
     <buffer tag,container_id>
       @type file
