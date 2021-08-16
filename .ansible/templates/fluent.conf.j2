@@ -12,18 +12,22 @@
 
 <filter docker.var.lib.docker.containers.*.*.log>
   @type docker_metadata
-  labels com.docker.stack.namespace:namespace,com.docker.swarm.service.name:service_name,com.docker.swarm.node.id:node_id
+  labels com.docker.stack.namespace:namespace,com.docker.swarm.service.name:service.name,com.docker.swarm.node.id:node.id
 </filter>
 
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
   <record>
     message ${record["log"]}
-    #event.dataset docker.${record["stream"]}
+    container.id ${record["container_id"]}
+    container.hostname ${record["container_hostname"]}
+    container.name ${record["container_name"]}
+    event.dataset docker.${record["stream"]}
     environment {{ env }}
-    vm_hostname {{ inventory_hostname }}
+    host.hostname {{ ansible_hostname }}
+    host.name {{ inventory_hostname }}
   </record>
-  remove_keys log
+  remove_keys log, container_id, container_hostname, container_name, 
 </filter>
 
 <match docker.var.lib.docker.containers.*.*.log>
