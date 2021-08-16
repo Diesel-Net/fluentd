@@ -19,7 +19,7 @@
   @type record_transformer
   <record>
     message ${record["log"]}
-    event.dataset docker.${record["stream"]}
+    #event.dataset docker.${record["stream"]}
     environment {{ env }}
     vm_hostname {{ inventory_hostname }}
   </record>
