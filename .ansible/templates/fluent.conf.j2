@@ -19,9 +19,6 @@
   @type record_transformer
   <record>
     message ${record["log"]}
-    event.category process
-    event.kind event
-    event.type info
     event.dataset docker.${record["stream"]}
     environment {{ env }}
     vm_hostname {{ inventory_hostname }}
@@ -91,14 +88,14 @@
     reload_on_failure true
     request_timeout 30s
 
-    <buffer tag,container_id>
-      @type file
-      path /fluentd/log/dlog/elastic-buffer
+    # <buffer tag,container_id>
+    #   @type file
+    #   path /fluentd/log/dlog/elastic-buffer
       
-      flush_mode interval
-      flush_interval 3s
+    #   flush_mode interval
+    #   flush_interval 3s
 
-    </buffer>
+    # </buffer>
 
   </match>
 </label>
