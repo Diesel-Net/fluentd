@@ -18,10 +18,12 @@
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
   <record>
-    #event.dataset docker.log
+    message record["log"]
+    event.dataset docker
     environment {{ env }}
     vm_hostname {{ inventory_hostname }}
   </record>
+  remove_keys log
 </filter>
 
 <match docker.var.lib.docker.containers.*.*.log>
