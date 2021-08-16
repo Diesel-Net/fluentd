@@ -33,17 +33,17 @@
 <match docker.var.lib.docker.containers.*.*.log>
   @type rewrite_tag_filter
   <rule>
-    key container_name
+    key container.name
     pattern /^(.*)(elastic|kibana|fluent)(.*)$/
     tag ignore.${tag}
   </rule>
   <rule>
-    key service_name
+    key service.name
     pattern /^(.+)$/
     tag raw.$1
   </rule>
   <rule>
-    key container_name
+    key container.name
     pattern /^(.+)$/
     tag raw.adhoc
   </rule>
