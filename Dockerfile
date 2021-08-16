@@ -1,4 +1,4 @@
-FROM fluent/fluentd:v1.13
+FROM fluent/fluentd:v1.12
 USER root
 RUN ["gem", "install", "fluent-plugin-elasticsearch:5.0.5"]
 RUN ["gem", "install", "elasticsearch-xpack:7.13.3"]
