@@ -85,13 +85,13 @@
     # reload_on_failure true
     # request_timeout 30s
 
-    <buffer>
-      @type file
-      path /fluentd/log/dlog/elastic-buffer
-      #flush_thread_count 8
-      flush_mode immediate
-      retry_forever true
-    </buffer>
+    # <buffer>
+    #   @type file
+    #   path /fluentd/log/dlog/elastic-buffer
+    #   #flush_thread_count 8
+    #   flush_mode immediate
+    #   retry_forever true
+    # </buffer>
 
   </match>
 </label>
