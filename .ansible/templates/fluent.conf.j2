@@ -68,14 +68,14 @@
 
     @type elasticsearch_data_stream
     @log_level info
-    log_es_400_reason true
+    #log_es_400_reason true
 
     #enable_ilm true
     #ilm_policy_id docker-logs
 
     #index_name docker-${tag}
-    #data_stream_name docker-${tag}
-    data_stream_name test
+    data_stream_name docker-${tag}
+    #data_stream_name test
 
     ca_file /etc/ssl/certs/ca-certificates.crt
     
@@ -86,8 +86,8 @@
     user {{ elastic_username }}
     password {{ elastic_password }}
 
-    reconnect_on_error true
-    reload_on_failure true
+    #reconnect_on_error true
+    #reload_on_failure true
     # request_timeout 30s
 
     # <buffer>
