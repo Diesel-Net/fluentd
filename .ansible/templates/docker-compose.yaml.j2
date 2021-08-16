@@ -4,7 +4,7 @@ version: '3.8'
 services: 
 
   collector:
-    image: {{ docker_image }}
+    image: {{ docker_registry }}/{{ repository }}:{{ version }}-latest
     volumes:
       - {{ ssl_cert_dir }}/:/etc/ssl/certs/
       - {{ data_dir }}/:/fluentd/log/ 

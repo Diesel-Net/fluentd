@@ -18,9 +18,12 @@
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
   <record>
+    message ${record["log"]}
+    event.dataset docker
     environment {{ env }}
     vm_hostname {{ inventory_hostname }}
   </record>
+  remove_keys log
 </filter>
 
 <match docker.var.lib.docker.containers.*.*.log>
@@ -66,12 +69,11 @@
 <label @LOGS_PARSED>
   <match **>
 
-    @type elasticsearch
+    @type elasticsearch_data_stream
     @log_level info
-    #log_es_400_reason true
-    suppress_type_name true
+    log_es_400_reason true
 
-    index_name docker-${tag}
+    data_stream_name docker-${tag}
 
     ca_file /etc/ssl/certs/ca-certificates.crt
     
@@ -86,12 +88,13 @@
     reload_on_failure true
     request_timeout 30s
 
-    <buffer>
+    <buffer tag,container_id>
       @type file
       path /fluentd/log/dlog/elastic-buffer
-      flush_thread_count 16
-      flush_mode immediate
-      retry_forever true
+      
+      flush_mode interval
+      flush_interval 3s
+
     </buffer>
 
   </match>
