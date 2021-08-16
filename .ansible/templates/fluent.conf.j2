@@ -26,8 +26,9 @@
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
+    service.name ${record["service.name"]}
   </record>
-  remove_keys log, container_id, container_hostname, container_name, 
+  #remove_keys log, container_id, container_hostname, container_name, 
 </filter>
 
 <match docker.var.lib.docker.containers.*.*.log>
