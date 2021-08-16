@@ -28,7 +28,7 @@
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
 
-    service ${ { name: docker} }
+    service ${ { "name": "docker"} }
     #service.name docker
     #event.dataset docker.${record["stream"]}
   </record>
