@@ -66,12 +66,13 @@
 <label @LOGS_PARSED>
   <match **>
 
-    @type elasticsearch
+    @type elasticsearch_data_stream
     @log_level info
-    #log_es_400_reason true
+    log_es_400_reason true
     suppress_type_name true
 
-    index_name docker-${tag}
+    #index_name docker-${tag}
+    elasticsearch_data_stream docker-${tag}
 
     ca_file /etc/ssl/certs/ca-certificates.crt
     
