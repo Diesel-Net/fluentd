@@ -22,11 +22,11 @@
     container.id ${record["container_id"]}
     container.hostname ${record["container_hostname"]}
     container.name ${record["container_name"]}
-    event.dataset docker.${record["stream"]}
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
-    service.name ${record["service"]["name"]}
+    service.name docker
+    event.dataset docker.${record["stream"]}
   </record>
   #remove_keys log, container_id, container_hostname, container_name, 
 </filter>
