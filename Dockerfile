@@ -1,8 +1,8 @@
 FROM fluent/fluentd:v1.13
 USER root
 RUN ["gem", "install", "fluent-plugin-elasticsearch"]
-RUN ["gem", "install", "elasticsearch-api:7.13.3"]
 RUN ["gem", "install", "elasticsearch-xpack:7.13.3"]
+RUN ["gem", "install", "elasticsearch-api:7.13.3"]
 RUN ["gem", "install", "fluent-plugin-rewrite-tag-filter"]
 RUN ["gem", "install", "fluent-plugin-record-reformer"]
 RUN ["gem", "install", "fluent-plugin-filter-docker_metadata"]
