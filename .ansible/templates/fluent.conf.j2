@@ -18,7 +18,7 @@
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
   enable_ruby true
-  renew_record true
+  #renew_record true
   <record>
     message ${record["log"]}
     container.id ${record["container_id"]}
