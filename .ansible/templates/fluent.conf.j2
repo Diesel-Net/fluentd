@@ -66,15 +66,16 @@
 <label @LOGS_PARSED>
   <match **>
 
-    @type elasticsearch_datastream
+    @type elasticsearch_data_stream
     @log_level debug
     log_es_400_reason true
 
-    enable_ilm true
-    ilm_policy_id docker-logs
+    #enable_ilm true
+    #ilm_policy_id docker-logs
 
-    index_name docker-${tag}
-    data_stream_name docker-${tag}
+    #index_name docker-${tag}
+    #data_stream_name docker-${tag}
+    data_stream_name test
 
     ca_file /etc/ssl/certs/ca-certificates.crt
     
