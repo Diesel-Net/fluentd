@@ -29,6 +29,7 @@
     host.name {{ inventory_hostname }}
     #service { "name": "docker" }
     #event ${ { "dataset": record["service"]["name"].record["stream"] } }
+    event { "dataset": "apache.access" }
   </record>
   remove_keys time, log, container_id, container_hostname, container_name
 </filter>
