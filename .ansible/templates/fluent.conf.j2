@@ -28,7 +28,7 @@
     service.name docker
     event.dataset docker.${record["stream"]}
   </record>
-  #remove_keys log, container_id, container_hostname, container_name, 
+  remove_keys time, log, container_id, container_hostname, container_name
 </filter>
 
 <match docker.var.lib.docker.containers.*.*.log>
