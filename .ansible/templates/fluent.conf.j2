@@ -67,8 +67,8 @@
   <match **>
 
     @type elasticsearch_data_stream
-    @log_level trace
-    #log_es_400_reason true
+    @log_level info
+    log_es_400_reason true
 
     #enable_ilm true
     #ilm_policy_id docker-logs
