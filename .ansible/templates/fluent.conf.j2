@@ -17,6 +17,7 @@
 
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
+  enable_ruby true
   <record>
     message ${record["log"]}
     container.id ${record["container_id"]}
@@ -26,7 +27,7 @@
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
 
-    service ${merge({key: "name", value: "docker"})}
+    service ${record}.merge({key: "name", value: "docker"})
     #service.name docker
     #event.dataset docker.${record["stream"]}
   </record>
