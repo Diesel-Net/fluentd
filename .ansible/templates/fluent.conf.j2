@@ -27,14 +27,12 @@
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
-    #service.name docker
-    ecs.version 1.5.0
+    ecs.version 1.11.0
     event.dataset docker.${record["stream"]}
     event.module docker
     event.kind event
     event.category ["network", "web"]
     event.type ["info"]
-
   </record>
   remove_keys time, log, container_id, container_hostname, container_name
 </filter>
