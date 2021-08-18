@@ -27,8 +27,9 @@
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
-    service.name docker
+    #service.name docker
     event.dataset docker.${record["stream"]}
+    event.module docker
   </record>
   remove_keys time, log, container_id, container_hostname, container_name
 </filter>
