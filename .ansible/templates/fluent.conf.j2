@@ -28,6 +28,9 @@
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
     ecs.version 1.11.0
+    data_stream.dataset docker
+    data_stream.type logs
+    data_stream.namespace default
     event.dataset docker.${record["stream"]}
     event.module docker
     event.kind event
