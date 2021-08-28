@@ -27,15 +27,15 @@
     environment {{ env }}
     host.hostname {{ ansible_hostname }}
     host.name {{ inventory_hostname }}
-    ecs.version 1.11.0
-    data_stream.dataset docker
-    data_stream.type logs
-    data_stream.namespace default
-    event.dataset docker.${record["stream"]}
-    event.module docker
-    event.kind event
-    event.category ["network", "web"]
-    event.type ["info"]
+    # ecs.version 1.11.0
+    # data_stream.dataset docker
+    # data_stream.type logs
+    # data_stream.namespace default
+    # event.dataset docker.${record["stream"]}
+    # event.module docker
+    # event.kind event
+    # event.category ["network", "web"]
+    # event.type ["info"]
   </record>
   remove_keys time, log, container_id, container_hostname, container_name
 </filter>
@@ -102,14 +102,14 @@
     reload_on_failure true
     request_timeout 30s
 
-    <buffer tag,container_id>
-      @type file
-      path /fluentd/log/dlog/elastic-buffer
+    # <buffer tag,container_id>
+    #   @type file
+    #   path /fluentd/log/dlog/elastic-buffer
       
-      flush_mode interval
-      flush_interval 3s
+    #   flush_mode interval
+    #   flush_interval 1s
 
-    </buffer>
+    # </buffer>
 
   </match>
 </label>
