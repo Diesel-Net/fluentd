@@ -15,12 +15,14 @@ Centralized log aggregator for Docker Swarm
   - https://coralogix.com/log-analytics-blog/managing-docker-logs-with-elk-and-fluentd/
 
 ## Installing External Dependencies
-Ansible `2.10.3` was used at the time of this writing.
+Ansible `2.11.5` was used at the time of this writing.
 ```bash
 ansible-galaxy install -r .ansible/roles/requirements.yaml -p .ansible/roles --force
 ```
 
 ## Deploy
+You will need to have the ansible-vault password file configured on your machine. Please read the relevant [ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/vault.html#setting-a-default-password-source) for more information.
+
 ```bash
-ansible-playbook .ansible/deploy.yaml -i .ansible/inventories/development/hosts --vault-id ~/.tokens/vault.txt
+ansible-playbook .ansible/deploy.yaml -i .ansible/inventories/development
 ```
