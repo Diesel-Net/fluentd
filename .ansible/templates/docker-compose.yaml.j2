@@ -6,7 +6,7 @@ services:
   collector:
     image: {{ docker_image }}
     volumes:
-      - {{ ssl_cert_file }}/:/etc/ssl/certs/ca-certificates.crt
+      - {{ ssl_cert_file }}:/etc/ssl/certs/ca-certificates.crt
       - {{ data_dir }}/:/fluentd/log/ 
       - {{ config_dir }}/:/fluentd/etc/
       - /var/lib/docker/containers/:/var/lib/docker/containers/
