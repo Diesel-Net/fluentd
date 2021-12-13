@@ -34,6 +34,9 @@
         name: docker
         tasks_from: stack_deploy
 
-    - name: Force restart the docker service (to pick up configuration changes)
-      shell: docker service update --force {{ repository }}_{{ version }}_collector
-      when: not clean_install
+    - include_role:
+        name: docker
+        tasks_from: service_update
+      vars:
+        options: --force
+        docker_service: '{{ docker_stack }}_collector'
