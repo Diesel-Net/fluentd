@@ -25,9 +25,9 @@
         name: common
         tasks_from: make_data_dir
 
-    - name: Render fluent.conf.j2 to {{ config_dir }}/fluent.conf
+    - name: Render loki.conf.j2 to {{ config_dir }}/fluent.conf
       template:
-        src: fluent.conf.j2
+        src: loki.conf.j2
         dest: '{{ config_dir }}/fluent.conf'
 
     - include_role:
@@ -39,4 +39,5 @@
         tasks_from: service_update
       vars:
         options: --force
-        docker_service: '{{ docker_stack }}_collector'
+        docker_service: collector
+      when: not clean_install

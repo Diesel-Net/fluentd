@@ -3,6 +3,9 @@ kind: pipeline
 type: docker
 name: Install FluentD
 
+concurrency:
+  limit: 1
+
 clone:
   depth: 1
 
@@ -49,8 +52,8 @@ steps:
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
-      ELASTIC_PASSWORD:
-        from_secret: elastic_pass
+      LOKI_PASSWORD:
+        from_secret: loki_password
     settings:
       galaxy: .ansible/roles/requirements.yaml
       playbook: .ansible/deploy.yaml
@@ -61,7 +64,7 @@ steps:
     commands:
       - version=$DRONE_BRANCH
       - if [ ! -z $DRONE_TAG ]; then version=production; fi
-      - /bin/drone-ansible --inventory .ansible/inventories/$$version/hosts
+      - /bin/drone-ansible --inventory .ansible/inventories/$$version.yaml
 
 trigger:
   branch:

@@ -1,0 +1,107 @@
+<source>
+  @type tail
+  @id in_tail_container_logs
+  path /var/lib/docker/containers/*/*-json.log
+  pos_file /fluentd/log/containers.log.pos
+  tag docker.*
+  # https://docs.fluentd.org/input/tail#in_tail-doesnt-start-to-read-the-log-file-why
+  read_from_head true
+  <parse>
+    @type json
+    time_key time
+    time_format %iso8601
+  </parse>
+</source>
+
+<filter docker.var.lib.docker.containers.*.*.log>
+  @type docker_metadata
+  # https://rubygems.org/gems/fluent-plugin-filter-docker_metadata
+  # https://github.com/wshihadeh/fluent-plugin-filter-docker_metadata/blob/master/lib/fluent/plugin/filter_docker_metadata.rb
+  labels com.docker.stack.namespace:namespace,com.docker.swarm.service.name:service_name
+</filter>
+
+<match docker.var.lib.docker.containers.*.*.log>
+  @type rewrite_tag_filter
+  <rule>
+    key container_name
+    pattern /^(.*)(fluent)(.*)$/
+    tag ignore.${tag}
+  </rule>
+  <rule>
+    key service_name
+    pattern /^(.+)$/
+    tag raw.$1
+  </rule>
+  <rule>
+    key container_name
+    pattern /^(.+)$/
+    tag raw.adhoc
+  </rule>
+</match>
+
+<match ignore.**>
+  @type null
+</match>
+
+# use service_name for container_name for the rare case of adhoc containers (non-swarm services)
+<filter raw.**>
+  @type record_transformer
+  enable_ruby
+  <record>
+    service_name ${record["service_name"] or record["container_name"]}
+  </record>
+</filter>
+
+# uncomment for debugging
+# <match **>
+#   @type stdout
+# </match>
+
+<match raw.**>
+  @type detect_exceptions
+  remove_tag_prefix raw
+  message log
+  languages python
+</match>
+
+<match **>
+  @type relabel
+  @label @LOGS_PARSED
+</match>
+
+<label @LOGS_PARSED>
+  <match **>
+    # https://grafana.com/docs/loki/latest/clients/fluentd/#output-format
+    @type loki
+    url {{ loki_url }}
+    ca_cert /etc/ssl/certs/ca-certificates.crt
+    username {{ loki_username }}
+    password {{ loki_password }}
+
+    <label>
+      namespace
+      service_name
+      stream
+    </label>
+
+    extra_labels {"environment":"{{ env }}", "vm_hostname":"{{ inventory_hostname }}"}
+    remove_keys container_name,container_hostname,container_id
+    drop_single_key true
+
+    <buffer>
+      @type file
+      path /fluentd/log/dlog/loki-buffer
+      flush_thread_count 32
+      flush_mode immediate
+      retry_forever true
+    </buffer>
+
+  </match>
+</label>
+
+# not sure what this does anymore or if this is needed...
+<label @FLUENT_LOG>
+  <match **>
+    @type null
+  </match>
+</label>

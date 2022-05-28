@@ -1,0 +1,4 @@
+loki_url: https://loki.diesel.net
+
+loki_username: loki
+loki_password: "{{ lookup('env', 'LOKI_PASSWORD') }}"

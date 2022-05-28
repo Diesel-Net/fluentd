@@ -6,5 +6,7 @@ all:
         dev.diesel.net:
   
   vars:
+    env: development
+    clean_install: no
     ansible_user: automation
     ansible_python_interpreter: /usr/bin/python3
