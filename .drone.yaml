@@ -3,6 +3,9 @@ kind: pipeline
 type: docker
 name: Install FluentD
 
+concurrency:
+  limit: 1
+
 clone:
   depth: 1
 
