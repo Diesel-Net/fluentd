@@ -1,4 +1,4 @@
-# container names "starting" with these strings will be ignored
-ignored_container_names:
-  - fluentd # fluentd collector on each host
-  - drone- # drone builds start with this
+# container names matching any one of these patterns, will instruct fluentd to drop the logs
+ignored_container_patterns:
+  - (^.*fluentd-collector.*$) # fluentd collector on each host e.g. "fluentd-collector-asdfasldkjasdlfkjasdf"
+  - (^drone-[\w]{20}$) # drone build containers e.g. "drone-eijUWwBU8QPyv2pXGnJ1"
