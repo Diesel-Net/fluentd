@@ -64,7 +64,7 @@ steps:
     commands:
       - version=$DRONE_BRANCH
       - if [ ! -z $DRONE_TAG ]; then version=production; fi
-      - /bin/drone-ansible --inventory .ansible/inventories/$$version/hosts
+      - /bin/drone-ansible --inventory .ansible/inventories/$$version.yaml
 
 trigger:
   branch:
