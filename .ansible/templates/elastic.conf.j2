@@ -18,7 +18,7 @@
 <filter docker.var.lib.docker.containers.*.*.log>
   @type record_transformer
   <record>
-    environment {{ environment }}
+    environment {{ env }}
     vm_hostname {{ inventory_hostname }}
   </record>
 </filter>
