@@ -6,5 +6,7 @@ all:
         test.diesel.net:
 
   vars:
+    environment: test
+    clean_install: no
     ansible_user: automation
     ansible_python_interpreter: /usr/bin/python3

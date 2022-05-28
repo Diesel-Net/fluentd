@@ -13,14 +13,12 @@ all:
       hosts:
         tools.diesel.net:
 
-    games:
+    quadro:
       hosts:
-        games.diesel.net:
-
-    gpu:
-      hosts:
-        gpu.diesel.net:
+        quadro.diesel.net:
 
   vars:
+    environment: production
+    clean_install: no
     ansible_user: automation
     ansible_python_interpreter: /usr/bin/python3
