@@ -1,0 +1,4 @@
+# container names "starting" with these strings will be ignored
+ignored_container_names:
+  - fluentd # fluentd collector on each host
+  - drone- # drone builds start with this
