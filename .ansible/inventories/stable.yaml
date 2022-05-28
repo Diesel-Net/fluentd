@@ -7,6 +7,6 @@ all:
 
   vars:
     env: test
-    clean_install: yes
+    clean_install: no
     ansible_user: automation
     ansible_python_interpreter: /usr/bin/python3
