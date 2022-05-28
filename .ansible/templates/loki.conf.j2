@@ -4,8 +4,10 @@
   path /var/lib/docker/containers/*/*-json.log
   pos_file /fluentd/log/containers.log.pos
   tag docker.*
-  # https://docs.fluentd.org/input/tail#in_tail-doesnt-start-to-read-the-log-file-why
   read_from_head true
+  follow_inodes true
+  refresh_interval 10
+  read_lines_limit 5000
   <parse>
     @type json
     time_key time
@@ -88,12 +90,15 @@
     remove_keys container_name,container_hostname,container_id
     drop_single_key true
 
-    <buffer>
+    <buffer service_name>
       @type file
       path /fluentd/log/dlog/loki-buffer
       flush_thread_count 32
-      flush_mode immediate
-      retry_forever true
+      flush_mode interval
+      flush_interval 3s
+      retry_timeout 72h
+      retry_max_times 30
+      overflow_action throw_exception
     </buffer>
 
   </match>
