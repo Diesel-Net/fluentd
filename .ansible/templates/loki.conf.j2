@@ -24,7 +24,7 @@
   @type rewrite_tag_filter
   <rule>
     key container_name
-    pattern /^(.*)({{ ignored_container_names | join('|') }})(.*)$/
+    pattern {{ ignored_container_patterns | join('|') }}
     tag ignore.${tag}
   </rule>
   <rule>
