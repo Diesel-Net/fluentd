@@ -5,9 +5,9 @@
   pos_file /fluentd/log/containers.log.pos
   tag docker.*
   read_from_head false # only affects the startup behaviour from v1.14.3+
-  follow_inodes true
-  refresh_interval 10
-  read_lines_limit 5000
+  follow_inodes true # avoids reading rotated files duplicately
+  refresh_interval 5 # we want this pretty low for quicker pickup of repeated deployments
+  read_bytes_limit_per_second 33554432
   <parse>
     @type json
     time_key time
@@ -95,9 +95,8 @@
       path /fluentd/log/dlog/loki-buffer
       flush_thread_count 8
       flush_mode interval
-      flush_interval 5s
+      flush_interval 3s
       retry_timeout 72h
-      retry_max_times 30
       overflow_action throw_exception
     </buffer>
 
