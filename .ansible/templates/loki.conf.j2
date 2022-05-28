@@ -43,6 +43,7 @@
   @type null
 </match>
 
+# use service_name for container_name for the rare case of adhoc containers (non-swarm services)
 <filter raw.**>
   @type record_transformer
   enable_ruby
