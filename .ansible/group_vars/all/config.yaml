@@ -2,6 +2,3 @@
 ignored_container_patterns:
   - (^.*fluentd-collector.*$) # fluentd collector on each host e.g. "fluentd-collector-asdfasldkjasdlfkjasdf"
   - (^drone-[\w]{20}$) # drone build containers e.g. "drone-eijUWwBU8QPyv2pXGnJ1"
-
-
-(^.*fluentd-collector.*$)|(^drone-[\w]{20}$)
